@@ -1,0 +1,64 @@
+
+/*Change the Linked List from 3-> 4 -> 5 -> 6 TO: 6 -> 5 -> 3
+*/
+
+#include <iostream>
+using namespace std;
+
+
+struct ListNode
+{
+	int data;
+	ListNode* next;
+
+};
+
+void print(struct ListNode *n)
+{
+	while (n != NULL)
+	{
+		cout << n->data << " ";
+		n = n->next;
+	}
+	
+}
+
+int main()
+{
+	ListNode* h = NULL;
+	ListNode* f = NULL;
+	ListNode* s = NULL;
+	ListNode* t = NULL;
+	
+	h = new ListNode();
+	f = new ListNode();
+	s = new ListNode();
+	t = new ListNode();
+
+	h->data = 3;
+	h->next = f;
+
+	f->data = 4;
+	f->next = s;
+
+	s->data = 5;
+	s->next = t;
+
+	t->data = 6;
+	
+	cout << "The List is: ";
+	print(h);
+	cout << endl;
+
+	//Start at node t = 6
+	ListNode* n = t;
+	n->next = s;  //linked 6 with 5
+	s->next = h;  //linked 5 with 3
+	h->next = NULL;	//stop at 3
+	
+	cout << "The new list is: ";
+	print(n);
+	cout << endl;
+
+	return 0;
+}

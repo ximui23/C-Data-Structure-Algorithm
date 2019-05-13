@@ -1,0 +1,241 @@
+File: BTree.h
+
+#include<iostream>
+using namespace std;
+
+struct TreeNode
+{
+	int data;
+	TreeNode* left;
+	TreeNode* right;
+	TreeNode* parent;
+
+};
+struct TreeNode *newNode(int x)
+{
+	TreeNode *temp = (struct TreeNode *)malloc(sizeof(struct TreeNode));
+	temp->data = x;
+	temp->left = NULL;
+	temp->right = NULL;
+	return temp;
+}
+
+class BTree
+{
+
+public:
+	void print(struct TreeNode *root);
+	void add(TreeNode* &root, int x);
+	bool isLeaf(TreeNode* node);
+	void remove(TreeNode* node, int x);
+	TreeNode* findMin(TreeNode* node);
+	void search(TreeNode* &cur, int x, TreeNode* &parent);
+	
+};
+-------------------------------------------------------------------------------------------------------------------
+File: BTree.cpp
+#include “BTree.h”
+void BTree::print(struct TreeNode *root)
+{
+	if (root != NULL)
+	{
+		cout << root->data << endl;
+		print(root->left);
+		print(root->right);
+	}
+}
+
+void BTree::add(TreeNode* &root, int x)
+{
+	if (root == nullptr)
+	{
+		root = newNode(x);
+		return;
+	}
+
+	if (x < root->data)
+	{
+		add(root->left, x);
+	}
+	else
+	{
+		add(root->right, x);
+	}
+
+}
+
+bool BTree::isLeaf(TreeNode* node)
+{
+	return node->left == NULL & node->right == NULL;
+}
+
+TreeNode* BTree::findMin(TreeNode* node)
+{
+	
+	TreeNode* cur = node;
+	while (cur->left != NULL)
+		cur = cur->left;
+	return cur;
+}
+
+
+void BTree::search(TreeNode* &cur, int x, TreeNode* &parent)
+{
+	while (cur != nullptr && cur->data != x)
+	{
+		parent = cur;
+
+		if (x < cur->data)
+		{
+			cur = cur->left;
+		}
+		else {
+			cur = cur->right;
+		}
+	}
+}
+
+void BTree::remove(TreeNode* node, int x)
+{
+	TreeNode* parent = nullptr;
+	TreeNode* cur = node;
+
+	BTree::search(cur, x, parent);
+
+	if (cur == nullptr)
+		return;
+
+	if (isLeaf(cur))
+	{
+		if (cur != node)
+		{
+			if (parent->left == cur)
+				parent->left = nullptr;
+			else
+				parent->right = nullptr;
+		}
+		else
+		node = nullptr;
+		free(cur);
+	}
+
+	else if (cur->left && cur->right)
+	{
+		TreeNode* successor = BTree::findMin(cur->right);
+
+		int val = successor->data;
+
+		remove(node, successor->data);
+
+		cur->data = val;
+	}
+	else
+	{
+		if (node->left == NULL && node->right != NULL)
+		{
+			node->right->parent = node->parent;
+			node = node->right;
+		}
+		else
+		{
+			node->left->parent = node->parent;
+			node = node->left;
+		}
+
+	}
+
+}
+--------------------------------------------------------------------------------------------------------------------------------- 
+File: main.cpp
+#include “BTree.h”
+#include <iostream>
+using namespace std;
+int main()
+{
+	BTree Tree;
+	TreeNode *root = nullptr;
+
+	Tree.add(root, 30);
+	Tree.add(root, 20);
+	Tree.add(root, 40);
+	Tree.add(root, 10);
+	Tree.add(root, 25);
+	Tree.add(root, 35);
+	Tree.add(root, 37);
+	Tree.add(root, 50);
+
+	Tree.add(root, 7);
+
+	cout << "The BST is: " << endl;
+	Tree.print(root);
+
+	Tree.remove(root, 7);
+	cout << "Delete: 7" << endl;
+	cout << "The BST after deleting 7." << endl;
+	Tree.print(root);
+
+	Tree.remove(root, 20);
+	cout << "Delete: 20" << endl;
+	cout << "The BST after deleting 20." << endl;
+	Tree.print(root);
+
+	Tree.remove(root, 40);
+	cout << "Delete: 40" << endl;
+	cout << "The BST after deleting 40." << endl;
+	Tree.print(root);
+
+	Tree.remove(root, 30);
+	cout << "Delete: 30" << endl;
+	cout << "The BST after deleting 30." << endl;
+	Tree.print(root);
+	
+	return 0;
+}
+---------------------------------------------------------------------------------------------------------------------------- 
+OUTPUT:
+The BST is:
+30
+20
+10
+7
+25
+40
+35
+37
+50
+Delete: 7
+The BST after deleting 7.
+30
+20
+10
+25
+40
+35
+37
+50
+Delete: 20
+The BST after deleting 20.
+30
+25
+10
+40
+35
+37
+50
+Delete: 40
+The BST after deleting 40.
+30
+25
+10
+50
+35
+37
+Delete: 30
+The BST after deleting 30.
+35
+25
+10
+50
+35
+37
+Press any key to continue . . .

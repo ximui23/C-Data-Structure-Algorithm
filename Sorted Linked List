@@ -1,0 +1,180 @@
+#include <iostream>
+ 
+using namespace std;
+ 
+class Linked_List{
+    
+private:
+    struct Node *head = nullptr;
+    
+public:
+    int findlength();
+    void print();
+    bool isContained(int x);
+    void addElement(int x);
+    void removeElement(int x);
+    void swap(struct Node *x, struct Node *y);
+    void Sort();
+    
+};
+ 
+struct Node
+{
+    int data;
+    Node* next;
+    
+};
+
+int Linked_List::findlength()
+{
+    int length = 0;
+    Node *temp = head;
+    while (temp != NULL)
+    {
+        length++;
+        temp = temp->next;
+        
+    }
+    return length;
+}
+ 
+void Linked_List::print()
+{
+    
+    struct Node* cur = head;
+    
+    cout << "The linked list is: ";
+    while (cur != NULL) {
+        cout << " " << cur->data ;
+        cur = cur->next;
+        //cout << endl;
+    }
+    
+}
+ 
+bool Linked_List::isContained(int x)
+{
+    Node *temp = head;
+    while(temp != NULL)
+    {
+        if(temp->data == x)
+        {
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
+}
+ 
+void Linked_List::addElement(int x)
+{
+    Node *temp = new Node;
+    temp->data = x;
+    temp->next = head;
+    head = temp;
+}
+ 
+void Linked_List::removeElement(int x)
+{
+    Node *current = head;
+    Node *traverse = current;
+    
+    if(head->data == x)
+    {
+        head = head->next;
+        delete current;
+        cout <<  x << " is removing " << endl;
+    }
+    while (current != NULL && current->data != x){
+        traverse = current;
+        current = current->next;
+    }
+    if(current == NULL) return;
+    
+    traverse->next = current->next;
+    
+}
+ 
+void Linked_List::swap(struct Node *x, struct Node *y)
+{
+    //Create temp to store data of x
+    int temp = x->data;
+    //Assign data of y onto data of x
+    x->data = y->data;
+    //Take original data of x from temp and assign into y->data
+    y->data = temp;
+    //Finish swapping data of x and y
+}
+ 
+void Linked_List::Sort()
+{
+    int swapped;
+    Node *ptr1;
+    Node *ptr2 = NULL;
+    
+    if(head == NULL)
+    {
+        return;
+    }
+    do{
+        swapped = 0;
+        ptr1 = head;
+        
+        while(ptr1->next != ptr2)
+        {
+            if(ptr1->data > ptr1->next->data)
+            {
+                swap(ptr1, ptr1->next);
+                swapped = 1;
+            }
+            ptr1 = ptr1->next;
+        }
+        ptr2 = ptr1;
+    }
+    while(swapped);
+}
+
+int main()
+{
+    Linked_List L1;
+    
+    int input;
+    
+    L1.addElement(9);
+    L1.addElement(3);
+    L1.addElement(8);
+    L1.addElement(4);
+    
+    
+    cout << "The size of the list: " << L1.findlength() << endl;
+    
+    L1.Sort();
+    
+    L1.print();
+    cout << endl;
+    
+    cout << "Enter one element: " << endl;
+    cin >> input;
+    
+    if(L1.isContained(input))
+    {
+        cout << input << " is contained in the list. " << endl;
+        cout << "Removing " << endl;
+        L1.removeElement(input);
+        L1.Sort();
+        L1.print();
+        cout << "\nThe new size of list: " << L1.findlength() << endl;
+        
+    }
+    else {
+        cout << input << " is not contained in the list. " << endl;
+        L1.addElement(input);
+        cout << input << " is adding" << endl;
+        L1.Sort();
+        L1.print();
+        cout << "\nThe new size of list: " << L1.findlength() << endl;
+    }
+    
+    return 0;
+}
+

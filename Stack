@@ -1,0 +1,118 @@
+ 
+#include <iostream>
+using namespace std;
+ 
+class LinkedList_Stack{
+    
+private:
+    struct Node *head = nullptr;
+    int top = -1;
+    int size = 1000;
+    
+public:
+    void push(int x);
+    void print();
+    int pop();
+    int findMin();
+};
+ 
+struct Node
+{
+    int data;
+    Node* next;
+    
+};
+ 
+void LinkedList_Stack::push(int x)
+{
+    if(top > -1 || top < size)
+    {
+ 
+   /* Node *temp = new Node;          //create temp node
+    temp->data = x;                 //assign x to be data of temp
+    temp->next = head;              //point the head to the next node
+    head = temp;                 //assign temp to be head & get out of if statement
+    */
+        Node *n = new Node;
+        n->data = x;
+        n->next = head;
+        head = n;
+        cout << "Push: " << x << endl;
+    }
+    else
+    {
+        cout << "Stack overflows." << endl;
+    }
+    
+}
+void LinkedList_Stack::print()
+{
+    
+    struct Node* cur = head;
+    
+    cout << "The stack is: " << endl;
+    
+    while (cur != NULL) {
+        cout << " " << cur->data << endl;
+        cur = cur->next;
+    }
+}
+ 
+int LinkedList_Stack::pop()
+{
+    //stack is empty if top = -1
+    if(top == -1)
+    {
+        cout << "Stack is empty. " << endl;
+    }
+    else
+    {
+        //pop the top element
+        cout << "Pop: " << head->data << endl;
+        //move to the next node
+        head = head->next;
+        
+    }
+    return 0;
+}
+ 
+int LinkedList_Stack::findMin()
+{
+    //cannot assign to 0 because we can push element "0" in the stack
+    //then 0 will be the minimum
+    //assign data of head into min
+    int min = head->data;
+    
+    while (head != NULL)
+    {
+        //if head->data less than min -> assign head->data to be new min
+        if(head->data < min)
+        {
+            min = head->data;
+        }
+        //otherwise, move to the next node, and repeat the function if
+        head = head->next;
+        
+    }
+    
+    return min;
+}
+ 
+int main()
+{
+    LinkedList_Stack stack;
+    
+    stack.push(1);
+    stack.push(4);
+    stack.push(6);
+    stack.print();
+    
+    stack.pop();
+    stack.print();
+    
+    cout << "The minimum is: " << stack.findMin() << endl;
+    
+    
+}
+
+
